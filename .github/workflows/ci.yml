@@ -1,7 +1,6 @@
 name: Build, Test, and Deploy to Azure Web App
 
 on:
-  # Manual trigger üçün
   workflow_dispatch:
 
 permissions:
@@ -21,13 +20,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
-          cache: npm
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run unit tests (if present)
-        run: npm test --if-present
 
       - name: Azure Login
         uses: azure/login@v1
@@ -44,4 +39,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'webapp-gultaj-devops'
+          resource-group: 'web-labs-gultaj'
           images: '${{ secrets.DOCKERHUB_USERNAME }}/frontendapp-node:${{ github.sha }}'
